@@ -19,15 +19,24 @@
     />
   </head>
   <body>
-    <form class="search-form" id="search-form">
-      <input type="text" name="query" autocomplete="off" placeholder="Search images..." />
-      <button type="submit" data-btn="search">Find it</button>
-    </form>
-    <ul class="gallery js-gallery"></ul>
-    <button type="button" class="loadmore-btn is-hidden" data-btn="loadMore" disabled>
-      Load more
-    </button>
-    <button type="button" class="exe">OPEN</button>
-    <script src="./index.js"></script>
+    <section class="application">
+      <div class="container container__application">
+        <form class="search-form" id="search-form">
+          <input
+            class="search-form__input"
+            type="text"
+            name="query"
+            autocomplete="off"
+            placeholder="Search images..."
+          />
+          <button class="search-form__btn" type="submit" data-btn="search">Find it</button>
+        </form>
+        <ul class="gallery js-gallery list"></ul>
+        <button type="button" class="gallery__btn is-hidden" data-btn="loadMore" disabled>
+          Load more
+        </button>
+        <script src="./index.js"></script>
+      </div>
+    </section>
   </body>
 </html>

@@ -5,8 +5,6 @@ import openImage from '../vendors/basicligthbox';
 const refs = getRefs();
 
 import {
-  renderMarkup,
-  showLoadMoreBtn,
   hideLoadMoreBtn,
   disableLoadMoreBtn,
   clearGallery,
@@ -22,6 +20,7 @@ const onSubmit = e => {
   const query = e.currentTarget.elements.query.value;
 
   if (!query.trim()) {
+    showAlert(ALERTS.EMPTY);
     return;
   }
 
@@ -45,14 +44,6 @@ const onSubmit = e => {
     });
 
   e.currentTarget.reset();
-};
-
-const normalizeDate = ({ hits }) => {
-  hits.map(hit => {
-    return {
-      ...hit,
-    };
-  });
 };
 
 const onLoadMore = () => {

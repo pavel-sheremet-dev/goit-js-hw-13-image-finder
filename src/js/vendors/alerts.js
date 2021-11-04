@@ -4,6 +4,7 @@ import '@pnotify/core/dist/BrightTheme.css';
 
 const ALERTS = {
   NOT_FOUND: 'Images was not found. Please change your search query',
+  EMPTY: 'Empty serch query',
 };
 
 const showAlert = (title, message) => {
@@ -16,8 +17,8 @@ const showAlert = (title, message) => {
     stack: new Stack({
       dir1: 'up',
       dir2: 'left',
-      firstpos1: 30,
-      firstpos2: 30,
+      firstpos1: 20,
+      firstpos2: 20,
       spacing1: 36,
       spacing2: 36,
       push: 'bottom',

@@ -7,6 +7,7 @@ const openImage = src => {
 `);
 
   const imageRef = instance.element().querySelector('img');
+
   imageRef.addEventListener('load', instance.show, { once: true });
 };
 
