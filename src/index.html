@@ -19,24 +19,14 @@
     />
   </head>
   <body>
-    <!-- <section class="country">
-      <div class="container country__container">
-        <h1 class="country__title">Search countries</h1>
-        <div class="input-container">
-          <input
-            class="country__input"
-            type="text"
-            id="country-input"
-            placeholder="Enter country name"
-          />
-          <div class="js-spinner spinner-container"></div>
-        </div>
-
-        <div class="js-container country__result is-hidden"></div>
-        <button type="button" class="js-btn-clear clear-btn">Clear</button>
-      </div>
-    </section> -->
-
+    <form class="search-form" id="search-form">
+      <input type="text" name="query" autocomplete="off" placeholder="Search images..." />
+      <button type="submit" data-btn="search">Find it</button>
+    </form>
+    <ul class="gallery js-gallery"></ul>
+    <button type="button" class="loadmore-btn is-hidden" data-btn="loadMore" disabled>
+      Load more
+    </button>
     <script src="./index.js"></script>
   </body>
 </html>
