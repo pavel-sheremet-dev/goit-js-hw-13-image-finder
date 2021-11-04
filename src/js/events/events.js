@@ -1,5 +1,6 @@
 import { showAlert, showError, ALERTS } from '../vendors/alerts';
 import getRefs from '../data/references';
+import openImage from '../vendors/basicligthbox';
 
 const refs = getRefs();
 
@@ -70,15 +71,11 @@ const onLoadMore = () => {
     });
 };
 
-// const getGallery = (data, api) => {
-//   renderMarkup(data);
-//   const totalResults = api.countTotalResults();
-//   if (totalResults > data.totalHits) {
-//     hideLoadMoreBtn();
-//     console.log('last results');
-//     return;
-//   }
-//   showLoadMoreBtn();
-// };
+const onImageClick = e => {
+  if (e.target.tagName !== 'IMG') {
+    return;
+  }
+  openImage(e.target.dataset.src);
+};
 
-export { onSubmit, onLoadMore, api };
+export { onSubmit, onLoadMore, onImageClick };
