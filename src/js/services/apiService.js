@@ -1,6 +1,6 @@
 export default class ApiService {
   #API_KEY = '24136877-bceaa9033dc460acdc4ccde64';
-  #BASE_API_URL = 'https://pixabay.com/api/';
+  #BASE_API_URL = 'https://cors-anywhere.herokuapp.com/https://pixabay.com/api/';
 
   constructor() {
     this.query = '';

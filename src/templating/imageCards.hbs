@@ -2,7 +2,13 @@
   <li class='gallery__item'>
     <div class='photo-card' data-id='{{id}}'>
       <div class='photo-card__img-container'>
-        <img class='photo-card__img' src='{{webformatURL}}' data-src='{{largeImageURL}}' alt='' />
+        <img
+          class='photo-card__img is-hidden'
+          src='{{webformatURL}}'
+          data-src='{{largeImageURL}}'
+          alt=''
+          loading='lazy'
+        />
       </div>
 
       <div class='stats'>

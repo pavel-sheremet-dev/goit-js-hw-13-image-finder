@@ -7,7 +7,7 @@ const opts = {
   radius: 5,
   scale: 1.0,
   corners: 1,
-  color: '#d3ebd0',
+  color: '#3a2f55',
   fadeColor: 'transparent',
   animation: 'spinner-line-shrink',
   rotate: 0,
@@ -23,4 +23,25 @@ const opts = {
 
 const spinner = new Spinner(opts);
 
-export default spinner;
+const loadSpinner = new Spinner({
+  lines: 12,
+  length: 7,
+  width: 1,
+  radius: 10,
+  scale: 2.0,
+  corners: 1,
+  color: '#ded7f0',
+  fadeColor: 'transparent',
+  animation: 'spinner-line-shrink',
+  rotate: 0,
+  direction: 1,
+  speed: 1,
+  zIndex: 2e9,
+  className: 'spinner',
+  top: '50%',
+  left: '50%',
+  shadow: '0 0 1px transparent',
+  position: 'absolute',
+});
+
+export { spinner, loadSpinner };

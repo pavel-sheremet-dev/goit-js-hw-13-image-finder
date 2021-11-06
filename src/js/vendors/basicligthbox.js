@@ -1,5 +1,6 @@
 import * as basicLightbox from 'basiclightbox';
 import 'basiclightbox/src/styles/main.scss';
+import { hideBackdrop } from '../services/pageServices';
 
 const openImage = src => {
   const instance = basicLightbox.create(`
@@ -8,7 +9,14 @@ const openImage = src => {
 
   const imageRef = instance.element().querySelector('img');
 
-  imageRef.addEventListener('load', instance.show, { once: true });
+  imageRef.addEventListener(
+    'load',
+    () => {
+      instance.show();
+      hideBackdrop();
+    },
+    { once: true },
+  );
 };
 
 export default openImage;

@@ -14,8 +14,21 @@
 
 body {
   font-family: Roboto;
-  background-image: url(../images/background.jpg);
-  background-position: top;
+}
+
+body::after {
+  background-image: url(../images/background.svg);
+  content: '';
+  position: fixed;
+  top: 0;
+  height: 100vh;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: scroll;
+  background-size: cover;
 }
 
 p,
