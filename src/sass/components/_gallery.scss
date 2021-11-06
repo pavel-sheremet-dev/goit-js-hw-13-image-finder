@@ -1,7 +1,3 @@
-.container__application {
-  padding: 30px 0;
-}
-
 .gallery {
   margin-bottom: 30px;
   opacity: 1;
@@ -12,43 +8,8 @@
   opacity: 0;
 }
 
-.gallery__btn {
-  position: relative;
-  display: block;
-  text-align: left;
-  margin-right: auto;
-  margin-left: auto;
-}
-
-.gallery__spinner {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-}
-
-.load-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 100;
-  transition: opacity 250ms linear, visibility 250ms linear;
-  overflow: auto;
-}
-
-.load-backdrop.is-hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.gallery__btn:disabled {
-  background-color: var(--placeholder);
-}
-
 .gallery__item {
+  position: relative;
   text-align: center;
 }
 
@@ -111,6 +72,31 @@
   opacity: 0;
 }
 
+.gallery__btn {
+  display: block;
+  text-align: left;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.gallery__btn:disabled {
+  background-color: var(--placeholder);
+}
+
+@media screen and (max-width: 479px) {
+  .gallery__btn {
+    display: block;
+    width: 100%;
+    height: 60px;
+    text-align: center;
+    border-radius: 0;
+  }
+
+  .gallery {
+    margin-bottom: 0;
+  }
+}
+
 @media screen and (min-width: 480px) {
   .gallery__item:not(:last-child) {
     margin-bottom: 20px;
@@ -154,5 +140,34 @@
   .photo-card__img-container {
     width: 360px;
     height: 260px;
+  }
+}
+
+.photo-card__loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: top left;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: var(--loader-color);
+  opacity: 0;
+  transition: opacity 250ms linear;
+}
+
+.gallery__item.active .photo-card__loader {
+  animation: photo-card-loader 1s ease infinite;
+  opacity: 1;
+}
+
+@keyframes photo-card-loader {
+  from {
+    transform: rotate(0turn) translate(-50%, -50%);
+  }
+  to {
+    transform: rotate(1turn) translate(-50%, -50%);
   }
 }

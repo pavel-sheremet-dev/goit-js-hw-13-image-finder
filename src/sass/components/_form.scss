@@ -1,7 +1,24 @@
 .search-form {
+  width: 100%;
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 30px;
   margin-bottom: 30px;
   text-align: center;
   padding: 0 15px;
+  opacity: 1;
+  transition: opacity 250ms linear;
+}
+
+.search-form.transparent {
+  opacity: 0.7;
+}
+
+.search-form:hover {
+  opacity: 1;
 }
 
 .search-form__input {

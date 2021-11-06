@@ -1,10 +1,12 @@
 @import './spinner';
+@import './components/loader-backdrop';
 @import './base/section';
 @import './components/form';
 @import './components/gallery';
 
 :root {
   --input-bg: #ded7f0;
+  --loader-color: rgba(222, 215, 240, 0.6);
   --btn-color: #514277;
   --placeholder: #887ea0;
   --active-btn-color: #3a2f55;

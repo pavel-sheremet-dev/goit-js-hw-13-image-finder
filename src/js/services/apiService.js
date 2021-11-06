@@ -1,6 +1,6 @@
 export default class ApiService {
   #API_KEY = '24136877-bceaa9033dc460acdc4ccde64';
-  #BASE_API_URL = 'https://cors-anywhere.herokuapp.com/https://pixabay.com/api/';
+  #BASE_API_URL = 'https://pixabay.com/api/';
 
   constructor() {
     this.query = '';
@@ -8,7 +8,7 @@ export default class ApiService {
     this.per_page = 12;
     this.orientation = 'horizontal';
     this.image_type = 'photo';
-    this.results = null;
+    this.resultsCounter = null;
     this.firstFetchedElemetId = null;
   }
 
@@ -45,11 +45,10 @@ export default class ApiService {
   };
 
   countTotalResults = () => {
-    return this.page * this.per_page;
+    this.resultsCounter = this.page * this.per_page;
   };
 
   getFirstFetchedElemetId = ({ hits }) => {
-    console.log(hits);
     this.firstFetchedElemetId = hits[0].id;
   };
 }

@@ -5,34 +5,35 @@ import { loadSpinner } from '../vendors/spinner';
 
 const refs = getRefs();
 
-const renderMarkup = ({ hits }) => {
-  const markup = makeImageCards(hits);
-  refs.gallery.insertAdjacentHTML('beforeend', markup);
-  refs.gallery.classList.remove(CSS.IS_HIDDEN);
-  showImages();
-};
-
-const showImages = () => {
-  const images = document.querySelectorAll('img');
-  images.forEach(image => {
-    image.addEventListener(
-      'load',
-      () => {
-        image.classList.remove(CSS.IS_HIDDEN);
-      },
-      { once: true },
-    );
-  });
-};
-
-const getGallery = (data, apiService) => {
+const getGallery = (data, totalResults, page) => {
   renderMarkup(data);
-  const totalResults = apiService.countTotalResults();
+  showImages(page);
   if (totalResults > data.totalHits) {
     hideLoadMoreBtn();
     return;
   }
   showLoadMoreBtn();
+};
+
+const renderMarkup = ({ hits }) => {
+  const markup = makeImageCards(hits);
+  refs.gallery.insertAdjacentHTML('beforeend', markup);
+  refs.gallery.classList.remove(CSS.IS_HIDDEN);
+};
+
+const showImages = page => {
+  const images = document.querySelectorAll(`[data-page="${page}"]`);
+  images.forEach(image => {
+    const liRef = image.closest('li');
+    image.addEventListener(
+      'load',
+      () => {
+        image.classList.remove(CSS.IS_HIDDEN);
+        liRef.classList.remove(CSS.ACTIVE);
+      },
+      { once: true },
+    );
+  });
 };
 
 const clearGallery = () => {

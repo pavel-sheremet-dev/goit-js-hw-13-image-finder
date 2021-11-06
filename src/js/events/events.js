@@ -11,7 +11,6 @@ import {
   scrollToNextPage,
   showBackdrop,
   hideBackdrop,
-  hideGallery,
 } from '../services/pageServices';
 import ApiService from '../services/apiService';
 
@@ -19,9 +18,24 @@ const refs = getRefs();
 
 const api = new ApiService();
 
+const getNormalizeData = data => {
+  const results = data.hits;
+  const hits = results.map(result => {
+    return {
+      ...result,
+      page: api.page,
+    };
+  });
+  return {
+    ...data,
+    hits,
+  };
+};
+
 const onSubmit = e => {
   e.preventDefault();
-  const query = e.currentTarget.elements.query.value;
+  const form = e.currentTarget;
+  const query = form.elements.query.value;
   if (!query.trim()) {
     showAlert(ALERTS.EMPTY);
     return;
@@ -40,14 +54,19 @@ const onSubmit = e => {
           spinner.stop();
           return;
         }
+        const normalizeData = getNormalizeData(data);
+        api.countTotalResults();
+        getGallery(normalizeData, api.resultsCounter, api.page);
         spinner.stop();
-        getGallery(data, api);
+        form.classList.add('transparent');
+
+        refs.input.addEventListener('focus', onInputFocus);
       })
       .catch(err => {
         hideLoadMoreBtn();
         clearGallery();
-        spinner.stop();
         showError(err);
+        spinner.stop();
       });
   });
   e.currentTarget.reset();
@@ -61,11 +80,12 @@ const onLoadMore = () => {
     .fetchPictures(api.query)
     .then(data => {
       hideBackdrop();
-      getGallery(data, api);
+      const normalizeData = getNormalizeData(data);
+      api.countTotalResults();
+      getGallery(normalizeData, api.resultsCounter, api.page);
 
-      api.getFirstFetchedElemetId(data);
+      api.getFirstFetchedElemetId(normalizeData);
       const elemToScroll = getElementToScroll(api.firstFetchedElemetId);
-      console.log(elemToScroll);
       scrollToNextPage(elemToScroll);
     })
     .catch(err => {
@@ -81,6 +101,13 @@ const onImageClick = e => {
   }
   showBackdrop();
   openImage(e.target.dataset.src);
+};
+
+const onInputFocus = e => {
+  refs.form.classList.remove('transparent');
+  e.target.addEventListener('blur', () => {
+    refs.form.classList.add('transparent');
+  });
 };
 
 export { onSubmit, onLoadMore, onImageClick };

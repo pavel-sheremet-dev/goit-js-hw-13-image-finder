@@ -7,6 +7,6 @@ export default () => {
     loadMoreBtn: document.querySelector('[data-btn="loadMore"]'),
     searchSpin: document.querySelector('.search-form__spinner'),
     loadMoreSpinner: document.querySelector('.gallery__spinner'),
-    backdrop: document.querySelector('.js-load-backdrop'),
+    backdrop: document.querySelector('.js-loader-backdrop'),
   };
 };
