@@ -22,13 +22,14 @@ body::after {
   position: fixed;
   top: 0;
   width: 100vw;
+  height: 100vh;
   left: 0;
   right: 0;
   z-index: -1;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: 0 0;
   background-attachment: scroll;
-  background-size: cover;
+  background-size: 100% 100%;
 }
 
 p,
