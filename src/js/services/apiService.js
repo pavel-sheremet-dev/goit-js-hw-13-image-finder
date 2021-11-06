@@ -9,6 +9,7 @@ export default class ApiService {
     this.orientation = 'horizontal';
     this.image_type = 'photo';
     this.results = null;
+    this.firstFetchedElemetId = null;
   }
 
   fetchPictures = searchQuery => {
@@ -45,5 +46,10 @@ export default class ApiService {
 
   countTotalResults = () => {
     return this.page * this.per_page;
+  };
+
+  getFirstFetchedElemetId = ({ hits }) => {
+    console.log(hits);
+    this.firstFetchedElemetId = hits[0].id;
   };
 }

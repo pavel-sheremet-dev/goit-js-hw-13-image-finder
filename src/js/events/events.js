@@ -7,6 +7,7 @@ import {
   disableLoadMoreBtn,
   clearGallery,
   getGallery,
+  getElementToScroll,
   scrollToNextPage,
   showBackdrop,
   hideBackdrop,
@@ -36,15 +37,16 @@ const onSubmit = e => {
         const results = data.hits;
         if (!results.length) {
           showAlert(query, ALERTS.NOT_FOUND);
+          spinner.stop();
           return;
         }
-
         spinner.stop();
         getGallery(data, api);
       })
       .catch(err => {
         hideLoadMoreBtn();
         clearGallery();
+        spinner.stop();
         showError(err);
       });
   });
@@ -60,7 +62,11 @@ const onLoadMore = () => {
     .then(data => {
       hideBackdrop();
       getGallery(data, api);
-      scrollToNextPage(data);
+
+      api.getFirstFetchedElemetId(data);
+      const elemToScroll = getElementToScroll(api.firstFetchedElemetId);
+      console.log(elemToScroll);
+      scrollToNextPage(elemToScroll);
     })
     .catch(err => {
       hideLoadMoreBtn();

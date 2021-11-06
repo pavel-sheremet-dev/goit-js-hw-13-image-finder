@@ -21,15 +21,13 @@ body::after {
   content: '';
   position: fixed;
   top: 0;
-  width: 100vw;
   height: 100vh;
   left: 0;
   right: 0;
   z-index: -1;
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  background-attachment: scroll;
-  background-size: 20% auto;
+  background-repeat: repeat;
+  background-position: top;
+  background-size: 800px;
 }
 
 p,

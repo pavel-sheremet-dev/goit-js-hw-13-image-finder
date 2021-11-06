@@ -64,10 +64,12 @@ const disableLoadMoreBtn = () => {
   refs.loadMoreBtn.disabled = true;
 };
 
-const scrollToNextPage = data => {
-  const firstCardId = data.hits[0].id;
-  const cardToScroll = document.querySelector(`[data-id="${firstCardId}"]`);
-  cardToScroll.scrollIntoView({
+const getElementToScroll = id => {
+  return document.querySelector(`[data-id="${id}"]`);
+};
+
+const scrollToNextPage = element => {
+  element.scrollIntoView({
     behavior: 'smooth',
     block: 'start',
   });
@@ -90,6 +92,7 @@ export {
   disableLoadMoreBtn,
   clearGallery,
   getGallery,
+  getElementToScroll,
   scrollToNextPage,
   showBackdrop,
   hideBackdrop,
