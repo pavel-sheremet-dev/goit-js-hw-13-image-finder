@@ -98,7 +98,6 @@ const onLoadMore = () => {
     })
     .catch(err => {
       hideLoadMoreBtn();
-      clearGallery();
       showError(err);
     });
 };
