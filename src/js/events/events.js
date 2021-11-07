@@ -81,6 +81,14 @@ const onLoadMore = () => {
     .fetchPictures(api.query)
     .then(data => {
       hideBackdrop();
+
+      const results = data.hits;
+      if (!results.length) {
+        showAlert(query, 'Server is not responding. Try again later);
+        spinner.stop();
+        return;
+      }
+
       const normalizeData = api.getNormalizeData(data);
       api.countTotalResults();
       getGallery(normalizeData, api.resultsCounter, api.page);
