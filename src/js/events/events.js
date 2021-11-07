@@ -18,19 +18,19 @@ const refs = getRefs();
 
 const api = new ApiService();
 
-const getNormalizeData = data => {
-  const results = data.hits;
-  const hits = results.map(result => {
-    return {
-      ...result,
-      page: api.page,
-    };
-  });
-  return {
-    ...data,
-    hits,
-  };
-};
+// const getNormalizeData = data => {
+//   const results = data.hits;
+//   const hits = results.map(result => {
+//     return {
+//       ...result,
+//       page: api.page,
+//     };
+//   });
+//   return {
+//     ...data,
+//     hits,
+//   };
+// };
 
 const onSubmit = e => {
   e.preventDefault();
@@ -54,7 +54,7 @@ const onSubmit = e => {
           spinner.stop();
           return;
         }
-        const normalizeData = getNormalizeData(data);
+        const normalizeData = api.getNormalizeData(data);
         api.countTotalResults();
         getGallery(normalizeData, api.resultsCounter, api.page);
         spinner.stop();
@@ -70,6 +70,7 @@ const onSubmit = e => {
       });
   });
   e.currentTarget.reset();
+  refs.input.blur();
 };
 
 const onLoadMore = () => {
@@ -80,7 +81,7 @@ const onLoadMore = () => {
     .fetchPictures(api.query)
     .then(data => {
       hideBackdrop();
-      const normalizeData = getNormalizeData(data);
+      const normalizeData = api.getNormalizeData(data);
       api.countTotalResults();
       getGallery(normalizeData, api.resultsCounter, api.page);
 

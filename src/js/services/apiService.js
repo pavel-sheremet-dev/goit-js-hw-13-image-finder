@@ -51,4 +51,18 @@ export default class ApiService {
   getFirstFetchedElemetId = ({ hits }) => {
     this.firstFetchedElemetId = hits[0].id;
   };
+
+  getNormalizeData = data => {
+    const results = data.hits;
+    const normalizeHits = results.map(result => {
+      return {
+        ...result,
+        page: this.page,
+      };
+    });
+    return {
+      ...data,
+      hits: normalizeHits,
+    };
+  };
 }

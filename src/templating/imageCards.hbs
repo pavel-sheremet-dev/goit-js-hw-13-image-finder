@@ -1,6 +1,7 @@
 {{#each this}}
   <li class='gallery__item active' data-id='{{id}}'>
     <div class='photo-card'>
+      <div class='photo-card__loader'></div>
       <div class='photo-card__img-container'>
         <img
           class='photo-card__img is-hidden'
@@ -29,7 +30,7 @@
           {{downloads}}
         </p>
       </div>
-      <div class='photo-card__loader'></div>
+
     </div>
   </li>
 {{/each}}

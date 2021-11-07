@@ -18,6 +18,10 @@ body {
   font-family: Roboto;
 }
 
+.is-lock {
+  overflow: hidden;
+}
+
 body::after {
   background-image: url(../images/background.svg);
   content: '';
