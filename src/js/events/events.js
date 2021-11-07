@@ -84,7 +84,7 @@ const onLoadMore = () => {
 
       const results = data.hits;
       if (!results.length) {
-        showAlert(query, 'Server is not responding. Try again later);
+        showAlert(query, 'Server is not responding. Try again later');
         return;
       }
 
