@@ -35,8 +35,8 @@ const api = new ApiService();
 const onSubmit = e => {
   e.preventDefault();
   const form = e.currentTarget;
-  const query = form.elements.query.value;
-  if (!query.trim()) {
+  const query = form.elements.query.value.toLowerCase().trim();
+  if (!query) {
     showAlert(ALERTS.EMPTY);
     return;
   }
