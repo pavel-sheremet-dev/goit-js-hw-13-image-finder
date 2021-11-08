@@ -15,7 +15,7 @@ const options = {
 const openImage = src => {
   const instance = basicLightbox.create(
     `
-    <img src="${src}" width="800" height="600">
+    <img src="${src}">
 `,
     options,
   );

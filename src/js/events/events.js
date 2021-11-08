@@ -2,6 +2,8 @@ import { showAlert, showError, ALERTS } from '../vendors/alerts';
 import getRefs from '../data/references';
 import openImage from '../vendors/basicligthbox';
 import { spinner } from '../vendors/spinner';
+import CSS from '../data/css';
+import notFoundImageLink from '../../images/broken.png';
 import {
   hideLoadMoreBtn,
   disableLoadMoreBtn,
@@ -11,26 +13,13 @@ import {
   scrollToNextPage,
   showBackdrop,
   hideBackdrop,
+  getNotFoundPicture,
 } from '../services/pageServices';
 import ApiService from '../services/apiService';
 
 const refs = getRefs();
 
 const api = new ApiService();
-
-// const getNormalizeData = data => {
-//   const results = data.hits;
-//   const hits = results.map(result => {
-//     return {
-//       ...result,
-//       page: api.page,
-//     };
-//   });
-//   return {
-//     ...data,
-//     hits,
-//   };
-// };
 
 const onSubmit = e => {
   e.preventDefault();
@@ -40,7 +29,7 @@ const onSubmit = e => {
     showAlert(ALERTS.EMPTY);
     return;
   }
-
+  getNotFoundPicture(notFoundImageLink);
   spinner.spin(refs.searchSpin);
   hideLoadMoreBtn();
   clearGallery().then(() => {
@@ -58,8 +47,9 @@ const onSubmit = e => {
         api.countTotalResults();
         getGallery(normalizeData, api.resultsCounter, api.page);
         spinner.stop();
-        form.classList.add('transparent');
+        form.classList.add(CSS.TRANSPARENT);
 
+        refs.input.blur();
         refs.input.addEventListener('focus', onInputFocus);
       })
       .catch(err => {
@@ -70,7 +60,6 @@ const onSubmit = e => {
       });
   });
   e.currentTarget.reset();
-  refs.input.blur();
 };
 
 const onLoadMore = () => {
@@ -84,7 +73,7 @@ const onLoadMore = () => {
 
       const results = data.hits;
       if (!results.length) {
-        showAlert(query, 'Server is not responding. Try again later');
+        showAlert(query, ALERTS.NOT_RESPONDING);
         return;
       }
 
@@ -97,7 +86,8 @@ const onLoadMore = () => {
       scrollToNextPage(elemToScroll);
     })
     .catch(err => {
-      hideLoadMoreBtn();
+      hideBackdrop();
+      disableLoadMoreBtn();
       showError(err);
     });
 };
@@ -111,9 +101,9 @@ const onImageClick = e => {
 };
 
 const onInputFocus = e => {
-  refs.form.classList.remove('transparent');
+  refs.form.classList.remove(CSS.TRANSPARENT);
   e.target.addEventListener('blur', () => {
-    refs.form.classList.add('transparent');
+    refs.form.classList.add(CSS.TRANSPARENT);
   });
 };
 

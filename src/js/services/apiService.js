@@ -1,3 +1,5 @@
+import notFoundImageLink from '../../images/broken.png';
+
 export default class ApiService {
   #API_KEY = '24136877-bceaa9033dc460acdc4ccde64';
   #BASE_API_URL = 'https://pixabay.com/api/';
@@ -28,7 +30,6 @@ export default class ApiService {
       if (res.ok) {
         return res.json();
       }
-      console.log(res);
       return Promise.reject({
         title: res.status,
         message: res.statusText,
@@ -58,6 +59,7 @@ export default class ApiService {
       return {
         ...result,
         page: this.page,
+        // webformatURL: 'https://cdn.pixabay.com/photo/2015/10/30/20/13/sunrise-101_____4712_150.jpg',
       };
     });
     return {

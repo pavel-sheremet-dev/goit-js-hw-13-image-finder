@@ -2,8 +2,18 @@ import getRefs from '../data/references';
 import makeImageCards from '../../templating/imageCards';
 import CSS from '../data/css';
 import { loadSpinner } from '../vendors/spinner';
+import notFoundImageLink from '../../images/broken.png';
 
 const refs = getRefs();
+
+const getNotFoundPicture = src => {
+  const img = new Image();
+  img.src = src;
+  img.dataset.src = src;
+  img.alt = 'Not found';
+  img.classList.add(CSS.IMG, CSS.NOT_FOUND);
+  return img;
+};
 
 const getGallery = (data, totalResults, page) => {
   renderMarkup(data);
@@ -25,6 +35,7 @@ const showImages = page => {
   const images = document.querySelectorAll(`[data-page="${page}"]`);
   images.forEach(image => {
     const liRef = image.closest('li');
+
     image.addEventListener(
       'load',
       () => {
@@ -33,6 +44,14 @@ const showImages = page => {
       },
       { once: true },
     );
+
+    image.onerror = () => {
+      const notFoundImage = getNotFoundPicture(notFoundImageLink);
+      image.replaceWith(notFoundImage);
+      setTimeout(() => {
+        liRef.classList.remove(CSS.ACTIVE);
+      }, 2000);
+    };
   });
 };
 
@@ -98,4 +117,5 @@ export {
   showBackdrop,
   hideBackdrop,
   hideGallery,
+  getNotFoundPicture,
 };

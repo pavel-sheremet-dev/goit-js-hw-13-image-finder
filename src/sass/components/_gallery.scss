@@ -74,6 +74,16 @@
   opacity: 0;
 }
 
+.gallery__item.active .not-found {
+  opacity: 0;
+  transition: opacity 250ms linear;
+}
+
+.gallery__item .not-found {
+  opacity: 0.5;
+  transition: opacity 250ms linear;
+}
+
 .gallery__btn {
   display: block;
   text-align: left;
