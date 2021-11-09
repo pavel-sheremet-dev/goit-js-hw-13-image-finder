@@ -47,12 +47,24 @@ const showImages = page => {
 
     image.onerror = () => {
       const notFoundImage = getNotFoundPicture(notFoundImageLink);
+      notFoundImage.dataset.id = liRef.dataset.id;
       image.replaceWith(notFoundImage);
       setTimeout(() => {
         liRef.classList.remove(CSS.ACTIVE);
       }, 2000);
     };
   });
+};
+
+const showImage = (image, liRef) => {
+  image.addEventListener(
+    'load',
+    () => {
+      image.classList.remove(CSS.IS_HIDDEN);
+      liRef.classList.remove(CSS.ACTIVE);
+    },
+    { once: true },
+  );
 };
 
 const clearGallery = () => {
@@ -82,6 +94,10 @@ const hideLoadMoreBtn = () => {
 
 const disableLoadMoreBtn = () => {
   refs.loadMoreBtn.disabled = true;
+};
+
+const enableLoadMoreBtn = () => {
+  refs.loadMoreBtn.disabled = false;
 };
 
 const getElementToScroll = id => {
@@ -118,4 +134,6 @@ export {
   hideBackdrop,
   hideGallery,
   getNotFoundPicture,
+  showImage,
+  enableLoadMoreBtn,
 };

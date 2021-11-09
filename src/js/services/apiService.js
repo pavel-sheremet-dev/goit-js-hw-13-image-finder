@@ -37,6 +37,23 @@ export default class ApiService {
     });
   };
 
+  fetchByID = id => {
+    const urlParams = new URLSearchParams({
+      id,
+      key: this.#API_KEY,
+    });
+
+    return fetch(`${this.#BASE_API_URL}?${urlParams}`).then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject({
+        title: res.status,
+        message: res.statusText,
+      });
+    });
+  };
+
   incrementPage = () => {
     this.page += 1;
   };
@@ -56,10 +73,11 @@ export default class ApiService {
   getNormalizeData = data => {
     const results = data.hits;
     const normalizeHits = results.map(result => {
+      const imageUrl = result.webformatURL ? result.webformatURL : notFoundImageLink;
       return {
         ...result,
         page: this.page,
-        // webformatURL: 'https://cdn.pixabay.com/photo/2015/10/30/20/13/sunrise-101_____4712_150.jpg',
+        webformatURL: imageUrl,
       };
     });
     return {

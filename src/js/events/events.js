@@ -14,8 +14,11 @@ import {
   showBackdrop,
   hideBackdrop,
   getNotFoundPicture,
+  showImage,
+  enableLoadMoreBtn,
 } from '../services/pageServices';
 import ApiService from '../services/apiService';
+import makeImage from '../../templating/image';
 
 const refs = getRefs();
 
@@ -107,4 +110,25 @@ const onInputFocus = e => {
   });
 };
 
-export { onSubmit, onLoadMore, onImageClick };
+const onStatusOnline = () => {
+  enableLoadMoreBtn();
+  refs.gallery.addEventListener('click', onImageClick);
+
+  const notFoundImages = document.querySelectorAll('img[alt="Not found"]');
+  notFoundImages.forEach(notFoundImage => {
+    const container = notFoundImage.closest('div');
+    const liRef = notFoundImage.closest('li');
+    liRef.classList.add(CSS.ACTIVE);
+    api
+      .fetchByID(notFoundImage.dataset.id)
+      .then(data => {
+        container.innerHTML = makeImage(data.hits[0]);
+      })
+      .then(() => {
+        const newImage = container.querySelector('.photo-card__img');
+        showImage(newImage, liRef);
+      });
+  });
+};
+
+export { onSubmit, onLoadMore, onImageClick, onStatusOnline };
