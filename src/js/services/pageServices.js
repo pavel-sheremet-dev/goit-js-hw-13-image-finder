@@ -1,12 +1,3 @@
-// const options = {
-//   url: NOT_FOUND_IMG_LINK,
-//   css: CSS,
-//   refs: refs,
-//   makeImageCards: makeImageCards,
-//   imageModal: basicLightbox,
-//   loadSpinner: loadSpinner,
-// };
-
 import ApiService from './apiServices';
 
 export default class PageServices extends ApiService {
@@ -21,7 +12,6 @@ export default class PageServices extends ApiService {
     inputLoadSpinner,
   }) {
     super(not_fnd_img_url);
-    // this._imageNotFoundLink = url;
     this._css = css;
     this._refs = refs;
     this.makeImage = makeImage;
