@@ -1,6 +1,6 @@
 import { Spinner } from 'spin.js';
 
-const opts = {
+const inputLoadSpinner = new Spinner({
   lines: 11,
   length: 3,
   width: 2,
@@ -19,9 +19,7 @@ const opts = {
   left: '50%',
   shadow: '0 0 1px transparent',
   position: 'absolute',
-};
-
-const spinner = new Spinner(opts);
+});
 
 const loadSpinner = new Spinner({
   lines: 12,
@@ -44,4 +42,4 @@ const loadSpinner = new Spinner({
   position: 'absolute',
 });
 
-export { spinner, loadSpinner };
+export { inputLoadSpinner, loadSpinner };

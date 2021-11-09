@@ -1,134 +1,153 @@
-import { showAlert, showError, ALERTS } from '../vendors/alerts';
-import getRefs from '../data/references';
-import openImage from '../vendors/basicligthbox';
-import { spinner } from '../vendors/spinner';
-import CSS from '../data/css';
-import notFoundImageLink from '../../images/broken.png';
-import {
-  hideLoadMoreBtn,
-  disableLoadMoreBtn,
-  clearGallery,
-  getGallery,
-  getElementToScroll,
-  scrollToNextPage,
-  showBackdrop,
-  hideBackdrop,
-  getNotFoundPicture,
-  showImage,
-  enableLoadMoreBtn,
-} from '../services/pageServices';
-import ApiService from '../services/apiService';
-import makeImage from '../../templating/image';
+import { showAlert, showError } from '../vendors/alerts';
+import ALERTS from '../data/alertsMsgs';
+import PageServices from '../services/pageServices';
 
-const refs = getRefs();
-
-const api = new ApiService();
-
-const onSubmit = e => {
-  e.preventDefault();
-  const form = e.currentTarget;
-  const query = form.elements.query.value.toLowerCase().trim();
-  if (!query) {
-    showAlert(ALERTS.EMPTY);
-    return;
+export default class App extends PageServices {
+  constructor({
+    not_fnd_img_url,
+    css,
+    refs,
+    makeImageCards,
+    makeImage,
+    imageModal,
+    loadSpinner,
+    inputLoadSpinner,
+  }) {
+    super({
+      not_fnd_img_url,
+      css,
+      refs,
+      makeImageCards,
+      makeImage,
+      imageModal,
+      loadSpinner,
+      inputLoadSpinner,
+    });
   }
-  getNotFoundPicture(notFoundImageLink);
-  spinner.spin(refs.searchSpin);
-  hideLoadMoreBtn();
-  clearGallery().then(() => {
-    api.resetPage();
-    api
-      .fetchPictures(query)
-      .then(data => {
-        const results = data.hits;
-        if (!results.length) {
-          showAlert(query, ALERTS.NOT_FOUND);
-          spinner.stop();
-          return;
-        }
-        const normalizeData = api.getNormalizeData(data);
-        api.countTotalResults();
-        getGallery(normalizeData, api.resultsCounter, api.page);
-        spinner.stop();
-        form.classList.add(CSS.TRANSPARENT);
 
-        refs.input.blur();
-        refs.input.addEventListener('focus', onInputFocus);
-      })
-      .catch(err => {
-        hideLoadMoreBtn();
-        clearGallery();
-        showError(err);
-        spinner.stop();
-      });
-  });
-  e.currentTarget.reset();
-};
+  loadListeners = () => {
+    this._refs.form.addEventListener('submit', this.onSubmit);
 
-const onLoadMore = () => {
-  api.incrementPage();
-  showBackdrop();
-  disableLoadMoreBtn();
-  api
-    .fetchPictures(api.query)
-    .then(data => {
-      hideBackdrop();
+    this._refs.loadMoreBtn.addEventListener('click', this.onLoadMore);
 
-      const results = data.hits;
-      if (!results.length) {
+    this._refs.gallery.addEventListener('click', this.onImageClick);
+
+    window.addEventListener('online', this.onStatusOnline);
+
+    window.addEventListener('offline', this.onStatusOffline);
+  };
+
+  onSubmit = async e => {
+    try {
+      e.preventDefault();
+      const form = e.currentTarget;
+      const query = form.elements.query.value.toLowerCase().trim();
+      if (!query) {
+        showAlert(ALERTS.EMPTY);
+        return;
+      }
+      this.getNotFoundPicture(this._notFoundImageLink);
+      this.inputLoadSpinner.spin(this._refs.searchSpin);
+      this.hideLoadMoreBtn();
+      this.resetPage();
+
+      const resultsArray = await Promise.all([this.fetchPictures(query), this.clearGallery()]); // await
+      const data = resultsArray[0];
+      const galleryCards = data.hits;
+      if (!galleryCards.length) {
+        showAlert(query, ALERTS.NOT_FOUND);
+        this.inputLoadSpinner.stop();
+        return;
+      }
+      const normalizeData = this.getNormalizeData(data);
+      this.countTotalResults();
+      this.getGallery(normalizeData, this.resultsCounter, this.page);
+      this.inputLoadSpinner.stop();
+      form.classList.add(this._css.TRANSPARENT);
+
+      this._refs.input.addEventListener('focus', this.onInputFocus);
+      this._refs.form.reset();
+    } catch (err) {
+      this.hideLoadMoreBtn();
+      this.clearGallery();
+      showError(err);
+      this.inputLoadSpinner.stop();
+      console.log(err);
+    }
+  };
+
+  onLoadMore = async () => {
+    try {
+      this.incrementPage();
+      this.showBackdrop();
+      this.disableLoadMoreBtn();
+
+      const data = await this.fetchPictures(this.query); // await
+
+      this.hideBackdrop();
+
+      const galleryCards = data.hits;
+      if (!galleryCards.length) {
         showAlert(query, ALERTS.NOT_RESPONDING);
         return;
       }
 
-      const normalizeData = api.getNormalizeData(data);
-      api.countTotalResults();
-      getGallery(normalizeData, api.resultsCounter, api.page);
+      const normalizeData = this.getNormalizeData(data);
+      this.countTotalResults();
+      this.getGallery(normalizeData, this.resultsCounter, this.page);
 
-      api.getFirstFetchedElemetId(normalizeData);
-      const elemToScroll = getElementToScroll(api.firstFetchedElemetId);
-      scrollToNextPage(elemToScroll);
-    })
-    .catch(err => {
-      hideBackdrop();
-      disableLoadMoreBtn();
+      this.getFirstFetchedElemetId(normalizeData);
+      const elemToScroll = this.getElementToScroll(this.firstFetchedElemetId);
+      this.scrollToNextPage(elemToScroll);
+    } catch (err) {
+      this.hideBackdrop();
+      this.disableLoadMoreBtn();
       showError(err);
+      console.log(err);
+    }
+  };
+
+  onImageClick = e => {
+    if (e.target.tagName !== 'IMG') {
+      return;
+    }
+    this.showBackdrop();
+    this.openImage(e.target.dataset.src);
+  };
+
+  onInputFocus = e => {
+    this._refs.form.classList.remove(this._css.TRANSPARENT);
+    e.target.addEventListener('blur', () => {
+      this._refs.form.classList.add(this._css.TRANSPARENT);
     });
-};
+  };
 
-const onImageClick = e => {
-  if (e.target.tagName !== 'IMG') {
-    return;
-  }
-  showBackdrop();
-  openImage(e.target.dataset.src);
-};
+  onStatusOnline = () => {
+    this.enableLoadMoreBtn();
+    this._refs.gallery.addEventListener('click', this.onImageClick);
+    const notFoundImages = document.querySelectorAll(this._refs.notFoundImageSelector);
+    console.log(notFoundImages);
+    notFoundImages.forEach(notFoundImage => {
+      const container = notFoundImage.closest(this._refs.divContainerSelector);
+      const liRef = notFoundImage.closest(this._refs.liRefSelector);
+      liRef.classList.add(this._css.ACTIVE);
+      this.fetchByID(notFoundImage.dataset.id)
+        .then(data => {
+          container.innerHTML = this.makeImage(data.hits[0]);
+        })
+        .then(() => {
+          const newImage = container.querySelector(this._refs.imageSelector);
+          this.showImage(newImage, liRef);
+        });
+    });
+  };
 
-const onInputFocus = e => {
-  refs.form.classList.remove(CSS.TRANSPARENT);
-  e.target.addEventListener('blur', () => {
-    refs.form.classList.add(CSS.TRANSPARENT);
-  });
-};
+  onStatusOffline = () => {
+    this._refs.gallery.removeEventListener('click', this.onImageClick);
+    console.log('no internet connection');
+  };
 
-const onStatusOnline = () => {
-  enableLoadMoreBtn();
-  refs.gallery.addEventListener('click', onImageClick);
-
-  const notFoundImages = document.querySelectorAll('img[alt="Not found"]');
-  notFoundImages.forEach(notFoundImage => {
-    const container = notFoundImage.closest('div');
-    const liRef = notFoundImage.closest('li');
-    liRef.classList.add(CSS.ACTIVE);
-    api
-      .fetchByID(notFoundImage.dataset.id)
-      .then(data => {
-        container.innerHTML = makeImage(data.hits[0]);
-      })
-      .then(() => {
-        const newImage = container.querySelector('.photo-card__img');
-        showImage(newImage, liRef);
-      });
-  });
-};
-
-export { onSubmit, onLoadMore, onImageClick, onStatusOnline };
+  init = () => {
+    this.loadListeners();
+  };
+}

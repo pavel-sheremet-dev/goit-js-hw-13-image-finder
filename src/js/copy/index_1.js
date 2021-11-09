@@ -1,5 +1,5 @@
-import 'material-icons/iconfont/material-icons.css';
-import './sass/main.scss';
+// import 'material-icons/iconfont/material-icons.css';
+// import './sass/main.scss';
 // import { onSubmit, onLoadMore, onImageClick, onStatusOnline } from './js/events/eventsCopy';
 // import getRefs from './js/data/references';
 

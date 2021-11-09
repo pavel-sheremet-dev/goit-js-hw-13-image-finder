@@ -1,10 +1,8 @@
-import notFoundImageLink from '../../images/broken.png';
-
 export default class ApiService {
   #API_KEY = '24136877-bceaa9033dc460acdc4ccde64';
   #BASE_API_URL = 'https://pixabay.com/api/';
 
-  constructor() {
+  constructor(url) {
     this.query = '';
     this.page = 1;
     this.per_page = 12;
@@ -12,21 +10,23 @@ export default class ApiService {
     this.image_type = 'photo';
     this.resultsCounter = null;
     this.firstFetchedElemetId = null;
+    this._imageNotFoundLink = url;
   }
 
-  fetchPictures = searchQuery => {
-    this.query = searchQuery;
+  fetchPictures = async searchQuery => {
+    try {
+      this.query = searchQuery;
 
-    const urlParams = new URLSearchParams({
-      image_type: this.image_type,
-      orientation: this.orientation,
-      q: this.query,
-      page: this.page,
-      per_page: this.per_page,
-      key: this.#API_KEY,
-    });
+      const urlParams = new URLSearchParams({
+        image_type: this.image_type,
+        orientation: this.orientation,
+        q: this.query,
+        page: this.page,
+        per_page: this.per_page,
+        key: this.#API_KEY,
+      });
 
-    return fetch(`${this.#BASE_API_URL}?${urlParams}`).then(res => {
+      const res = await fetch(`${this.#BASE_API_URL}?${urlParams}`); // await
       if (res.ok) {
         return res.json();
       }
@@ -34,16 +34,19 @@ export default class ApiService {
         title: res.status,
         message: res.statusText,
       });
+    } catch (error) {}
+    return Promise.reject({
+      title: error.message,
     });
   };
 
-  fetchByID = id => {
+  fetchByID = async id => {
     const urlParams = new URLSearchParams({
       id,
       key: this.#API_KEY,
     });
-
-    return fetch(`${this.#BASE_API_URL}?${urlParams}`).then(res => {
+    try {
+      const res = await fetch(`${this.#BASE_API_URL}?${urlParams}`); // await
       if (res.ok) {
         return res.json();
       }
@@ -51,6 +54,9 @@ export default class ApiService {
         title: res.status,
         message: res.statusText,
       });
+    } catch (error) {}
+    return Promise.reject({
+      title: error.message,
     });
   };
 
@@ -72,8 +78,9 @@ export default class ApiService {
 
   getNormalizeData = data => {
     const results = data.hits;
+
     const normalizeHits = results.map(result => {
-      const imageUrl = result.webformatURL ? result.webformatURL : notFoundImageLink;
+      const imageUrl = result.webformatURL ? result.webformatURL : this._imageNotFoundLink;
       return {
         ...result,
         page: this.page,
