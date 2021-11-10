@@ -9,7 +9,6 @@ export default class ApiService {
     this.orientation = 'horizontal';
     this.image_type = 'photo';
     this.resultsCounter = null;
-    this.firstFetchedElemetId = null;
     this._imageNotFoundLink = not_fnd_img_url;
   }
 
@@ -71,10 +70,6 @@ export default class ApiService {
 
   countTotalResults = () => {
     this.resultsCounter = this.page * this.per_page;
-  };
-
-  getFirstFetchedElemetId = ({ hits }) => {
-    this.firstFetchedElemetId = hits[0].id;
   };
 
   getNormalizeData = data => {

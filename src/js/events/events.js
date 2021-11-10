@@ -95,9 +95,7 @@ export default class App extends PageServices {
       this.countTotalResults();
       this.getGallery(normalizeData, this.resultsCounter, this.page);
 
-      this.getFirstFetchedElemetId(normalizeData);
-      const elemToScroll = this.getElementToScroll(this.firstFetchedElemetId);
-      this.scrollToNextPage(elemToScroll);
+      this.scrollToNextPage(normalizeData);
     } catch (err) {
       this.hideBackdrop();
       this.disableLoadMoreBtn();

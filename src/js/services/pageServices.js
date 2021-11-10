@@ -61,7 +61,7 @@ export default class PageServices extends ApiService {
         image.replaceWith(notFoundImage);
         setTimeout(() => {
           liRef.classList.remove(this._css.ACTIVE);
-        }, 2000);
+        }, 3000);
       };
     });
   };
@@ -143,12 +143,8 @@ export default class PageServices extends ApiService {
     this._refs.loadMoreBtn.disabled = false;
   };
 
-  getElementToScroll = id => {
-    return document.querySelector(`[data-id="${id}"]`);
-  };
-
-  scrollToNextPage = element => {
-    element.scrollIntoView({
+  scrollToNextPage = ({ hits }) => {
+    document.querySelector(`[data-id="${hits[0].id}"]`).scrollIntoView({
       behavior: 'smooth',
       block: 'start',
     });
