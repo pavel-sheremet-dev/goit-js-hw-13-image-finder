@@ -77,7 +77,7 @@ export default class PageServices extends ApiService {
     );
   };
 
-  getOpenImageOptions = () => {
+  getImageModalWindowOptions = () => {
     return {
       onShow: () => {
         document.body.classList.add(this._css.LOCK);
@@ -89,14 +89,7 @@ export default class PageServices extends ApiService {
   };
 
   openImage = src => {
-    const options = {
-      onShow: () => {
-        document.body.classList.add(this._css.LOCK);
-      },
-      onClose: () => {
-        document.body.classList.remove(this._css.LOCK);
-      },
-    };
+    const options = this.getImageModalWindowOptions();
 
     const instance = this.imageModal.create(
       `
@@ -133,12 +126,12 @@ export default class PageServices extends ApiService {
   };
 
   showLoadMoreBtn = () => {
-    this._refs.loadMoreBtn.disabled = false;
+    this.enableLoadMoreBtn();
     this._refs.loadMoreBtn.classList.remove(this._css.IS_HIDDEN);
   };
 
   hideLoadMoreBtn = () => {
-    this._refs.loadMoreBtn.disabled = true;
+    this.disableLoadMoreBtn();
     this._refs.loadMoreBtn.classList.add(this._css.IS_HIDDEN);
   };
 

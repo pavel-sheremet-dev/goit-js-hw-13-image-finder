@@ -72,7 +72,6 @@ export default class App extends PageServices {
       this.clearGallery();
       showError(err);
       this.inputLoadSpinner.stop();
-      console.log(err);
     }
   };
 
@@ -103,7 +102,6 @@ export default class App extends PageServices {
       this.hideBackdrop();
       this.disableLoadMoreBtn();
       showError(err);
-      console.log(err);
     }
   };
 
@@ -122,15 +120,16 @@ export default class App extends PageServices {
     });
   };
 
-  onStatusOnline = () => {
+  onStatusOnline = async () => {
+    console.log('online');
     this.enableLoadMoreBtn();
     this._refs.gallery.addEventListener('click', this.onImageClick);
     const notFoundImages = document.querySelectorAll(this._refs.notFoundImageSelector);
-    console.log(notFoundImages);
     notFoundImages.forEach(notFoundImage => {
       const container = notFoundImage.closest(this._refs.divContainerSelector);
       const liRef = notFoundImage.closest(this._refs.liRefSelector);
       liRef.classList.add(this._css.ACTIVE);
+
       this.fetchByID(notFoundImage.dataset.id)
         .then(data => {
           container.innerHTML = this.makeImage(data.hits[0]);
@@ -138,7 +137,8 @@ export default class App extends PageServices {
         .then(() => {
           const newImage = container.querySelector(this._refs.imageSelector);
           this.showImage(newImage, liRef);
-        });
+        })
+        .catch(showError);
     });
   };
 
